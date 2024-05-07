@@ -30,7 +30,7 @@ export default function Administrations() {
     return (
       <main className={`main ${styles.administrationContainer}`}>
         <div className={styles.titleContainer}>
-          <h1>User Adminstration</h1>
+          <h1>User administrators</h1>
           <AdministrationModel btnLabel="Create" btnStyling="btn-theme" />
         </div>
   
