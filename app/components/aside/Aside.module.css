@@ -1,0 +1,13 @@
+.nav {
+    display: flex;
+    flex-direction: column;
+    
+    padding: 20px;
+}
+
+.navLink {
+    text-decoration: none;
+    color: var(--color-white);
+    font-size: 18px;
+    margin: 8px 0;
+}
