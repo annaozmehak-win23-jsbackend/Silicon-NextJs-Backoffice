@@ -2,7 +2,8 @@
 
 import Table from 'react-bootstrap/Table';
 import UpdateModel from '../components/customerModel/UpdateModel';
-import DeleteModel from '../components/administrationModel/DeleteModel';
+import DeleteModel from '../components/deleteModel/DeleteModel';
+import styles from './Customers.module.css';
 
 export default function Customers() {
   const tableData = [
@@ -27,9 +28,9 @@ export default function Customers() {
   ]
   
   return (
-    <main>
+    <main className={`main ${styles.customersContainer}`}>
       <div className="content"></div>
-        <h1>Customers</h1>
+        <h1 className={styles.title}>Customers</h1>
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -54,7 +55,7 @@ export default function Customers() {
                 <td>{data.lastName}</td>
                 <td>{data.email}</td>
                 <td>
-                    <DeleteModel btnIcon="fa-regular fa-trash" />
+                    <DeleteModel btnIcon="fa-regular fa-trash" modelTitle="Delete user" modelQuestion="Are you sure you want to delete this user?" modelConfirmText="Yes, delete user" />
                   </td>
               </tr>
             ))

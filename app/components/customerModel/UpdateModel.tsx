@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
-interface AdministrationModelProps {
+interface UpdateModelProps {
     btnLabel?: string;
     btnIcon?: string;
     btnStyling?: string;
 }
 
-export default function UpdateModel({ btnLabel, btnIcon, btnStyling } : AdministrationModelProps) {
+export default function UpdateModel({ btnLabel, btnIcon, btnStyling } : UpdateModelProps) {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);

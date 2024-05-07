@@ -2,13 +2,14 @@ import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import styles from './DeleteModel.module.css';
 
-interface AdministrationModelProps {
-    btnLabel?: string;
+interface DeleteModelProps {
     btnIcon?: string;
-    btnStyling?: string;
+    modelTitle?: string;
+    modelQuestion?: string;
+    modelConfirmText?: string;
 }
 
-export default function DeleteModel({ btnLabel, btnIcon, btnStyling } : AdministrationModelProps) {
+export default function DeleteModel({ btnIcon, modelTitle, modelQuestion, modelConfirmText } : DeleteModelProps) {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -16,22 +17,21 @@ export default function DeleteModel({ btnLabel, btnIcon, btnStyling } : Administ
     
     return (
         <div>
-            <button className={`btn ${btnStyling}`} onClick={handleShow}>
-                <i className={btnIcon}></i>
-                {btnLabel}
+            <button className="btn" onClick={handleShow}>
+                <i id="delete-icon" className={btnIcon}></i>
             </button>
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                <Modal.Title>Delete</Modal.Title>
+                <Modal.Title>{modelTitle}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <form>
-                        <p>Are you sure you want to delete this user?</p>
+                        <p>{modelQuestion}</p>
 
                         <div className={`input-group ${styles.inputGroup}`}>
                             <input type="checkbox" id="confirm" />
-                            <label htmlFor="confirm">Yes, l want to delete this user</label>
+                            <label htmlFor="confirm">{modelConfirmText}</label>
                         </div> 
                     </form>
                 </Modal.Body>

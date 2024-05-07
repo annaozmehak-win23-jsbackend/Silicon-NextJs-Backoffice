@@ -3,7 +3,7 @@
 import Table from 'react-bootstrap/Table';
 import styles from './Administrations.module.css';
 import AdministrationModel from '../components/administrationModel/AddModel';
-import DeleteModel from '../components/administrationModel/DeleteModel';
+import DeleteModel from '../components/deleteModel/DeleteModel';
 
 export default function Administrations() {
     const tableData = [
@@ -55,7 +55,7 @@ export default function Administrations() {
                   <td>{data.lastName}</td>
                   <td>{data.role}</td>
                   <td>
-                    <DeleteModel btnIcon="fa-regular fa-trash" />
+                    <DeleteModel btnIcon="fa-regular fa-trash" modelTitle="Delete" modelQuestion="Are you sure you want to remove this users role?" modelConfirmText="Yes, delete this users role" />
                   </td>
                 </tr>
               ))

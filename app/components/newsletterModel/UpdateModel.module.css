@@ -1,0 +1,8 @@
+.inputGroup {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: start;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
