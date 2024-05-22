@@ -7,12 +7,12 @@ interface DeleteModelProps {
     modelTitle?: string;
     modelQuestion?: string;
     modelConfirmText?: string;
-    onUnsubscribe: () => void;
+    onDelete: () => void;
     onUpdate: () => void;
     update: boolean;
 }
 
-export default function DeleteModel({ btnIcon, modelTitle, modelQuestion, modelConfirmText, onUnsubscribe, onUpdate, update } : DeleteModelProps) {
+export default function DeleteModel({ btnIcon, modelTitle, modelQuestion, modelConfirmText, onDelete, onUpdate, update } : DeleteModelProps) {
     const [show, setShow] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
     const [error, setError] = useState<string>('');
@@ -25,9 +25,9 @@ export default function DeleteModel({ btnIcon, modelTitle, modelQuestion, modelC
         setIsChecked(event.target.checked);
     };
 
-    const handleUnsubscribe = () => {
+    const handleDelete = () => {
         if (isChecked) {
-            onUnsubscribe();
+            onDelete();
             handleClose();
             onUpdate();
         }
@@ -65,7 +65,7 @@ export default function DeleteModel({ btnIcon, modelTitle, modelQuestion, modelC
                 <button className="btn btn-red-border" onClick={handleClose}>
                     Cancel
                 </button>
-                <button className="btn btn-red" type='submit' onClick={handleUnsubscribe}>
+                <button className="btn btn-red" type='submit' onClick={handleDelete}>
                     Delete
                 </button>
                 </Modal.Footer>

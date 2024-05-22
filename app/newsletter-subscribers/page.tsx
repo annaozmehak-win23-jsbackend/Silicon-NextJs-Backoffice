@@ -98,7 +98,7 @@ export default function Newsletter() {
                       modelTitle="Delete subscriptions" 
                       modelQuestion="Are you sure you want to delete all subscriptions for this user?" 
                       modelConfirmText="Yes, remove all subscriptions" 
-                      onUnsubscribe={() => unSubscribeUser(data.email)}
+                      onDelete={() => unSubscribeUser(data.email)}
                       onUpdate={handleUpdate}
                       update={update}
                       
