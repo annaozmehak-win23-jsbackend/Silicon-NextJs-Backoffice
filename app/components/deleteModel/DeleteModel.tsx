@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import styles from './DeleteModel.module.css';
 
@@ -7,13 +7,38 @@ interface DeleteModelProps {
     modelTitle?: string;
     modelQuestion?: string;
     modelConfirmText?: string;
+    onUnsubscribe: () => void;
+    onUpdate: () => void;
+    update: boolean;
 }
 
-export default function DeleteModel({ btnIcon, modelTitle, modelQuestion, modelConfirmText } : DeleteModelProps) {
+export default function DeleteModel({ btnIcon, modelTitle, modelQuestion, modelConfirmText, onUnsubscribe, onUpdate, update } : DeleteModelProps) {
     const [show, setShow] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
+    const [error, setError] = useState<string>('');
+    
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setIsChecked(event.target.checked);
+    };
+
+    const handleUnsubscribe = () => {
+        if (isChecked) {
+            onUnsubscribe();
+            handleClose();
+            onUpdate();
+        }
+        else {
+            setError('Please confirm the action by checking the checkbox');
+        }
+      };
+
+      useEffect(() => {
+
+      }, [update]);
     
     return (
         <div>
@@ -30,16 +55,17 @@ export default function DeleteModel({ btnIcon, modelTitle, modelQuestion, modelC
                         <p>{modelQuestion}</p>
 
                         <div className={`input-group ${styles.inputGroup}`}>
-                            <input type="checkbox" id="confirm" />
+                            <input type="checkbox" id="confirm" onChange={handleCheckboxChange} />
                             <label htmlFor="confirm">{modelConfirmText}</label>
                         </div> 
+                        {error && <p className={styles.error}>{error}</p>}
                     </form>
                 </Modal.Body>
                 <Modal.Footer>
                 <button className="btn btn-red-border" onClick={handleClose}>
                     Cancel
                 </button>
-                <button className="btn btn-red" onClick={handleClose}>
+                <button className="btn btn-red" type='submit' onClick={handleUnsubscribe}>
                     Delete
                 </button>
                 </Modal.Footer>

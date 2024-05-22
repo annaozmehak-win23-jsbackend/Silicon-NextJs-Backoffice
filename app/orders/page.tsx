@@ -1,28 +1,44 @@
 import Table from 'react-bootstrap/Table';
 
 export default function Orders() {
+  const tableData = [
+  {
+    firstName: 'Anna',
+    lastName: 'Özmehak',
+    course: 'React'
+  },
+  {
+    firstName: 'Calle',
+    lastName: 'Özmehak',
+    course: 'HTML & CSS'
+  },
+  {
+    firstName: 'Astrid',
+    lastName: 'Özmehak',
+    course: 'JavaScript'
+  }
+  ]
+
   return (
     <main>
+      <h1>Orders</h1>
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th>Order</th>
               <th>Customer</th>
+              <th>Course</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Anna Özmehak</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Calle Özmehak</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Astrid Özmehak</td>
-            </tr>
+            {
+              tableData.map((row, index) => (
+                <tr key={index}>
+                  <td>{row.firstName} {row.lastName}</td>
+                  <td>{row.course}</td>
+                </tr>
+              ))
+            }
+            
           </tbody>
         </Table>
     </main>
