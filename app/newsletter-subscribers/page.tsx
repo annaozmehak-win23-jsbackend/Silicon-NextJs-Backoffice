@@ -10,7 +10,7 @@ export default function Newsletter() {
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
   const [tableData, setTableData] = useState<any[]>([]);
-  const [update, setUpdate] = useState(false);
+  const [update, setUpdate] = useState<boolean>(false);
 
   useEffect(() => {
     fetch('https://newsletterprovider-silicon-win23-annaozmehak.azurewebsites.net/api/Subscribers?code=P3hlk3Ram5q0zQ-2E9WwlKGxyZCTJfi_92lR32urf20yAzFuF3QGdw%3D%3D', {
@@ -29,11 +29,12 @@ export default function Newsletter() {
     })
     .then(data => {
       setTableData(data.subscribers);
-      handleUpdate();
     })
     .catch(error => {
       setError(error.message);
     });
+
+  
     
   }, [update]);
 
@@ -57,7 +58,7 @@ export default function Newsletter() {
   }
 
   const handleUpdate = () => {
-    setUpdate(!update);
+    setUpdate(prevUpdate => !prevUpdate);
 };
 
   return (
