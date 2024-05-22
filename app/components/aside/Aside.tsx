@@ -11,7 +11,7 @@ export default function Aside() {
                 <Link className={styles.navLink} href="/administrations">Administrators</Link>
                 <Link className={styles.navLink} href="/courses">Courses</Link>
                 <Link className={styles.navLink} href="/orders">Orders</Link>
-                <Link className={styles.navLink} href="/newsletter-subscribers">Newsletter Subscribers</Link>
+                <Link className={styles.navLink} href="/newsletter-subscribers">Subscribers</Link>
                 <Link className={styles.navLink} href="/">Chat</Link>
             </nav>
       </aside>

@@ -17,7 +17,6 @@ export default function DeleteModel({ btnIcon, modelTitle, modelQuestion, modelC
     const [isChecked, setIsChecked] = useState(false);
     const [error, setError] = useState<string>('');
     
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 

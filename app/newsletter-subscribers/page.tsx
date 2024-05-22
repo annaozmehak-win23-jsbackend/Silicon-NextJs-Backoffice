@@ -12,6 +12,7 @@ export default function Newsletter() {
   const [tableData, setTableData] = useState<any[]>([]);
   const [update, setUpdate] = useState<boolean>(false);
 
+
   useEffect(() => {
     fetch('https://newsletterprovider-silicon-win23-annaozmehak.azurewebsites.net/api/Subscribers?code=P3hlk3Ram5q0zQ-2E9WwlKGxyZCTJfi_92lR32urf20yAzFuF3QGdw%3D%3D', {
       method: 'GET',
@@ -32,12 +33,10 @@ export default function Newsletter() {
     })
     .catch(error => {
       setError(error.message);
-    });
-
-  
-    
+    }); 
   }, [update]);
 
+  
   const unSubscribeUser = (email: string) => {
     fetch('https://newsletterprovider-silicon-win23-annaozmehak.azurewebsites.net/api/UnSubscribe?code=VqznU5w3x0sagOJvE_rOhM6MtbH-JJ4sXA5hpFK2TbktAzFu5Y4zPA%3D%3D', {
       method: 'POST',
@@ -61,6 +60,25 @@ export default function Newsletter() {
     setUpdate(prevUpdate => !prevUpdate);
 };
 
+const updateSubscriber = (email: string, updatedData: any) => {
+  fetch('https://newsletterprovider-silicon-win23-annaozmehak.azurewebsites.net/api/UpdateSubscriber?code=aSYKNQKp47STPpp8JAoTCv1rdf8WxevJu-QFAMxbYkmnAzFuj58FfA%3D%3D', {
+    method: 'PUT',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email, ...updatedData })
+  })
+  .then(res => {
+      if (res.ok) {
+        setSuccess('The subscriber has been updated successfully'); 
+        handleUpdate();
+          
+      } else {
+        setError('Unable to update the subscriber. Try again.');
+      }
+  })
+}
+
   return (
     <main className={`main ${styles.newsletterContainer}`}>
       <h1 className={styles.title}>Newsletter Subscribers</h1>
@@ -83,7 +101,11 @@ export default function Newsletter() {
             Array.isArray(tableData) && tableData.map((data) => (
               <tr key={data.email}>
                 <td>
-                  <UpdateModel btnIcon="fa-regular fa-pen-to-square" />
+                  <UpdateModel 
+                    btnIcon="fa-regular fa-pen-to-square"
+                    email={data.email}
+                    initalData={data}
+                    onUpdate={updateSubscriber} />
                 </td>
                 <td>{data.email}</td>
                 <td>{data.dailyNewsletter.toString()}</td>

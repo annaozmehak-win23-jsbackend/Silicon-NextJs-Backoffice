@@ -35,6 +35,7 @@ export default function Customers() {
     }); 
   }, []);
 
+  
   const deleteCustomer = (id: string) => {
     fetch(`https://accountprovider-silicon-win23-annaozmehak.azurewebsites.net/api/DeleteCustomer?code=OY4t260N5P0LeHmiVaodxR0oYcuyW_nNDODplZkwFrnEAzFuWYroQA%3D%3D&id=${id}`, {
       method: 'POST',
