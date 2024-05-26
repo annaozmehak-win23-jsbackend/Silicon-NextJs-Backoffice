@@ -21,6 +21,7 @@ interface ProgramDetails {
 }
   
 export interface CourseContent {
+    id?: string;
     imageUri: string;
     imageHeaderUri: string;
     isBestSeller: boolean;

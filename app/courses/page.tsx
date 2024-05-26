@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import styles from './Page.module.css';
 import { CourseContent } from "@/app/interfaces/courseTypes";
 import CreateModel from '../components/createCourseModel/CreateModel';
+import DeleteModel from '../components/deleteModel/DeleteModel';
 
 export default function Courses() {
   const [courses, setCourses] = useState<CourseContent[]>([]);
@@ -60,8 +61,11 @@ const json = JSON.stringify({ query });
 
 
   const handleCreateCourse = (courseData: CourseContent) => {
-    console.log('Creating course...', courseData);
-
+    if (!courseData.categories) {
+      console.error('Categories is undefined');
+      return;
+    }
+    
     fetch("http://localhost:7180/api/graphql", {
       method: "POST",
       headers: {
@@ -95,25 +99,65 @@ const json = JSON.stringify({ query });
     setUpdate(prevUpdate => !prevUpdate);
 };
 
+const handleDeleteCourse = (id: string) => {
+  console.log('Deleting course...', id);
+
+  fetch("http://localhost:7180/api/graphql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query: `
+      mutation ($id: String!) {
+        deleteCourse(id: $id)}`,   
+      variables: {
+        id: id,
+      },
+    }),
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error("Failed to delete course");
+      }
+    })
+    .then((data) => {
+      setCourses((prevCourses) => prevCourses.filter(course => course.id !== id));
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
     return (
       <main>
         <div className="content"></div>
         <div className={styles.headerContent}>
-          <h1>Courses</h1>
-          <CreateModel onCreate={handleCreateCourse} onUpdate={handleUpdate} update={update} />
-        </div>
-     
-        <div className={styles.courses}>
+            <h1>Courses</h1>
+            <CreateModel onCreate={handleCreateCourse} onUpdate={handleUpdate} update={update} />
+          </div>
+          <div className={styles.courses}>
           { 
-          courses.map((data, index) => (
+           courses.map((data, index) => (
             <div key={index} className={styles.course}>
+              <DeleteModel 
+                btnIcon="fa-regular fa-trash" 
+                modelTitle="Delete course" 
+                modelQuestion="Are you sure you want to delete this course?" 
+                modelConfirmText="Yes, remove course" 
+                onDelete={() => data.id && handleDeleteCourse(data.id)}
+                onUpdate={handleUpdate}
+                update={update}
+              />
               <img src={data.imageUri} alt={data.title} />
               <div className={styles.textContent}>
                 <h5>{data.title}</h5>
                 <p className={styles.bold}>Ingress: <span className={styles.notBold}>{data.ingress}</span></p>
                 <div className={styles.categoryAndAuthorBox}>
-                  <p className={styles.bold}>Categories: <span className={styles.notBold}>{data.categories.map((category) => category).join(", ")}</span></p>
-                  <p className={styles.bold}>Authors: <span className={styles.notBold}>{data.authors.map((author) => author.name).join(", ")}</span></p>
+                  <p className={styles.bold}>Categories: <span className={styles.notBold}>{data && data.categories ? data.categories.map((category) => category).join(", ") : 'N/A'}</span></p>
+                  <p className={styles.bold}>Authors: <span className={styles.notBold}>{data && data.authors ? data.authors.map((author) => author.name).join(", ") : 'N/A'}</span></p>
                 </div>
                 <div className={styles.tags}>
                   <p className={styles.bold}>Bestseller: <span className={styles.notBold}>{data.isBestSeller ? 'Yes' : 'No'}</span></p>
@@ -145,28 +189,32 @@ const json = JSON.stringify({ query });
                 </div>
                 <div>
                   <p className={styles.bold}>Description:</p>
-                  <p className={styles.notBold}>{data.content.description}</p>
+                  <p className={styles.notBold}>{data && data.content ? data.content.description : 'N/A'}</p>
                 </div>
                 <div>
                   <p className={styles.bold}>Includes:</p>
                   <ul>
                     {
-                      data.content.includes.map((item, index) => (
+                      data && data.content && data.content.includes ? data.content.includes.map((item, index) => (
                         <li key={index}>{item}</li>
                       ))
+                      :
+                      'N/A'
                     }
                   </ul>
                 </div>
                 <div>
                 <p className={styles.bold}>Program details:</p>
                   {      
-                    data.content.programDetails.map((item, index) => (
+                    data && data.content && data.content.programDetails ? data.content.programDetails.map((item, index) => (
                       <div key={index}>
                         <p className={styles.bold}>Title: <span className={styles.notBold}>{item.title}</span></p>
                         <p className={styles.bold}>Description: <span className={styles.notBold}>{item.description}</span></p>
                       </div>
                     
                     ))
+                    : 
+                    'N/A'
                   }
                 </div>
               

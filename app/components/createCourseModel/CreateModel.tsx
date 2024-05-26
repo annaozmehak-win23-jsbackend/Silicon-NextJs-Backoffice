@@ -2,6 +2,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import styles from './CreateModel.module.css';
 import { CourseContent } from "@/app/interfaces/courseTypes";
+import Form from 'react-bootstrap/Form';
 
 interface CreateModelProps {
     onCreate: (courseData: CourseContent) => void;
@@ -22,8 +23,8 @@ export default function CreateModel({ onCreate, onUpdate, update } : CreateModel
     };
 
     const handleCreate = () => {
-        const categoriesSelect = document.querySelector('select[name="categories"]') as HTMLSelectElement;
-        const selectedCategories = Array.from(categoriesSelect.selectedOptions).map(option => option.value);
+        const categoriesSelect = document.getElementById('categories') as HTMLSelectElement;
+        const selectedCategory = categoriesSelect.value;
 
         const authorsInput = (document.querySelector('input[name="author"]') as HTMLInputElement).value;
         const authorsArray = authorsInput.split(',').map(author => ({ name: author.trim() }));
@@ -47,7 +48,7 @@ export default function CreateModel({ onCreate, onUpdate, update } : CreateModel
             isBestSeller: (document.querySelector('input[name="bestseller"]') as HTMLInputElement).checked,
             isDigital: (document.querySelector('input[name="isdigital"]') as HTMLInputElement).checked,
             starRating: parseFloat(starRating),
-            categories: selectedCategories,
+            categories: [selectedCategory],
             authors: authorsArray,
             prices: {
                 price: parseFloat(priceInput),
@@ -107,17 +108,17 @@ export default function CreateModel({ onCreate, onUpdate, update } : CreateModel
                                 <input type="checkbox" name='isdigital' />
                             </div> 
                         </div>
-                        <div className={`input-group ${styles.inputGroup}`}>
-                                <label htmlFor="categories">Categories</label>
-                                <select name='categories' multiple>
-                                    <option value="web">Web</option>
-                                    <option value="fullstack">Fullstack</option>
-                                    <option value="developer">Developer</option>
-                                    <option value="html">HTML</option>
-                                    <option value="css">CSS</option>
-                                    <option value="javascript">JavaScript</option>
-                                </select>
-                            </div>
+                        {/* <div className={`input-group ${styles.inputGroup}`}> */}
+                      
+                            <Form.Select id='categories' aria-label="Categories">
+                                <option value="web">Web</option>
+                                <option value="fullstack">Fullstack</option>
+                                <option value="developer">Developer</option>
+                                <option value="html">HTML</option>
+                                <option value="css">CSS</option>
+                                <option value="javascript">JavaScript</option>
+                            </Form.Select>
+                            {/* </div> */}
                         
                         <div className={`input-group ${styles.inputGroup}`}>
                             <label htmlFor="author">Author</label>
