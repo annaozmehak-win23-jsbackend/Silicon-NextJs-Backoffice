@@ -1,0 +1,26 @@
+.priceContainer {
+    display: flex;
+    gap: 10px
+}
+
+.likesContainer {
+    display: flex;
+    gap: 10px
+}
+
+.bestsellerAndCategoryContainer {
+    display: flex;
+}
+
+.hoursAndReviewsContainer {
+    display: flex;
+    gap: 10px;
+}
+
+.inputGroup {
+    margin-bottom: 5px;
+}
+
+.programDetailsTitle {
+    margin-top: 5px;
+}

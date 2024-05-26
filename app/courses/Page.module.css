@@ -1,0 +1,61 @@
+.courses {
+    display: flex;
+    gap: 15px;
+    padding: 0 15px;
+    flex-wrap: wrap;
+}
+
+.headerContent {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.course {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0; 
+    width: 450px;
+}
+
+.textContent {
+    padding: 15px;
+}
+
+.likes {
+    display: flex;
+    justify-content: space-between;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.notBold {
+    font-weight: normal;
+}
+
+.categoryAndAuthorBox {
+    display: flex;
+    justify-content: space-between;
+}
+
+.priceWithSale {
+    display: flex;
+    justify-content: space-between;
+}
+
+.discount {
+    color: var(--color-danger-dark);
+    font-weight: normal;
+}
+
+.tags {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ratingAndHoursContainer {
+    display: flex;
+    justify-content: space-between;
+}
