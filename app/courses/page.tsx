@@ -5,6 +5,7 @@ import styles from './Page.module.css';
 import { CourseContent } from "@/app/interfaces/courseTypes";
 import CreateModel from '../components/createCourseModel/CreateModel';
 import DeleteModel from '../components/deleteModel/DeleteModel';
+import UpdateModal from '../components/updateCourseModel/UpdateModal';
 
 export default function Courses() {
   const [courses, setCourses] = useState<CourseContent[]>([]);
@@ -45,19 +46,23 @@ export default function Courses() {
 `;
 const json = JSON.stringify({ query });
 
-  useEffect(() => {
-    fetch("http://localhost:7180/api/graphql", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: json
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        setCourses(result.data.getCourses);
-      });
-  }, []);
+const fetchCourses = () => {
+  fetch("http://localhost:7180/api/graphql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: json
+  })
+    .then((res) => res.json())
+    .then((result) => {
+      setCourses(result.data.getCourses);
+    });
+};
+
+useEffect(() => {
+  fetchCourses();
+}, []);
 
 
   const handleCreateCourse = (courseData: CourseContent) => {
@@ -97,39 +102,101 @@ const json = JSON.stringify({ query });
 
   const handleUpdate = () => {
     setUpdate(prevUpdate => !prevUpdate);
-};
+  };
 
-const handleDeleteCourse = (id: string) => {
-  console.log('Deleting course...', id);
+  const handleDeleteCourse = (id: string) => {
+    fetch("http://localhost:7180/api/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: `
+        mutation ($id: String!) {
+          deleteCourse(id: $id)}`,   
+        variables: {
+          id: id,
+        },
+      }),
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error("Failed to delete course");
+        }
+      })
+      .then((data) => {
+        setCourses((prevCourses) => prevCourses.filter(course => course.id !== id));
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
 
-  fetch("http://localhost:7180/api/graphql", {
-    method: "POST",
+  const handleUpdateCourse = (updatedCourse: CourseContent) => {
+    if (updatedCourse.isDigital === undefined) {
+      updatedCourse.isDigital = false;
+    }
+
+    setCourses(prevCourses => prevCourses.map(course => course.id === updatedCourse.id ? updatedCourse : course));
+
+    console.log(updatedCourse);
+  fetch('http://localhost:7180/api/graphql', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       query: `
-      mutation ($id: String!) {
-        deleteCourse(id: $id)}`,   
+        mutation ($input: CourseUpdateRequestInput!) {
+          updateCourse(input: $input) {
+            isBestSeller
+            title
+            ingress
+            starRating
+            categories
+            authors {
+              name
+            }
+            prices {
+              price
+              currency
+              discount
+            }
+            hours
+            likesInProcent
+            reviews
+            likes
+            content {
+              description
+              includes
+              programDetails {
+                description
+                title
+              }
+            }
+          }
+        }`,
       variables: {
-        id: id,
+        input: updatedCourse,
       },
     }),
   })
-    .then((res) => {
+    .then(res => {
       if (res.ok) {
         return res.json();
       } else {
-        throw new Error("Failed to delete course");
+        throw new Error('Failed to update course');
       }
     })
-    .then((data) => {
-      setCourses((prevCourses) => prevCourses.filter(course => course.id !== id));
+    .then(data => {
+      fetchCourses();
     })
-    .catch((error) => {
+    .catch(error => {
       console.error('Error:', error);
     });
-}
+  }
 
     return (
       <main>
@@ -151,6 +218,9 @@ const handleDeleteCourse = (id: string) => {
                 onUpdate={handleUpdate}
                 update={update}
               />
+
+              <UpdateModal onUpdateCourse={handleUpdateCourse} onUpdate={handleUpdate} update={update} course={data} />
+
               <img src={data.imageUri} alt={data.title} />
               <div className={styles.textContent}>
                 <h5>{data.title}</h5>
