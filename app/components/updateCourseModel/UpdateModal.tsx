@@ -9,9 +9,10 @@ interface UpdateModelProps {
     onUpdate: () => void;
     update: boolean;
     course: CourseContent;
+    handleFileChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function UpdateModel({ onUpdateCourse, onUpdate, update, course } : UpdateModelProps) {
+export default function UpdateModel({ onUpdateCourse, onUpdate, update, course, handleFileChange } : UpdateModelProps) {
     const [show, setShow] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
     const [error, setError] = useState<string>('');
@@ -107,6 +108,10 @@ export default function UpdateModel({ onUpdateCourse, onUpdate, update, course }
                 <Modal.Title>Create a course</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    <form id="updateProfileImage" encType='multipart/form-data'>
+                        <label htmlFor='file' className={`btn btn-circle btn-circle-sm ${styles.label}`}>Change image</label>
+                        <input id="fileInput" type="file" name="file" accept='image/*' onChange={handleFileChange} />
+                    </form>
                     <form>
                         <div className={`input-group ${styles.inputGroup}`}>
                             <label htmlFor="title">Title</label>

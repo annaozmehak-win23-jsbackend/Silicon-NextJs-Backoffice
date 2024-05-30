@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import styles from './Page.module.css';
 import { CourseContent } from "@/app/interfaces/courseTypes";
 import CreateModel from '../components/createCourseModel/CreateModel';
@@ -10,12 +10,16 @@ import UpdateModal from '../components/updateCourseModel/UpdateModal';
 export default function Courses() {
   const [courses, setCourses] = useState<CourseContent[]>([]);
   const [update, setUpdate] = useState<boolean>(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [imageUri, setImageUri] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   const query = `
   query {
     getCourses {
       id
       isBestSeller
+      imageUri
       title
       ingress
       starRating
@@ -70,6 +74,8 @@ useEffect(() => {
       console.error('Categories is undefined');
       return;
     }
+
+    courseData.imageUri = imageUri;
     
     fetch("https://courseprovider-silicon-win23-annaozmehak.azurewebsites.net/api/graphql?code=CVCZN64AEFAJ7yBHc-pthwn1688UT39TE83HmqIlT2RlAzFuianevA%3D%3D", {
       method: "POST",
@@ -139,50 +145,52 @@ useEffect(() => {
       updatedCourse.isDigital = false;
     }
 
+    updatedCourse.imageUri = imageUri;
+
     setCourses(prevCourses => prevCourses.map(course => course.id === updatedCourse.id ? updatedCourse : course));
 
-    console.log(updatedCourse);
-  fetch('https://courseprovider-silicon-win23-annaozmehak.azurewebsites.net/api/graphql?code=CVCZN64AEFAJ7yBHc-pthwn1688UT39TE83HmqIlT2RlAzFuianevA%3D%3D', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `
-        mutation ($input: CourseUpdateRequestInput!) {
-          updateCourse(input: $input) {
-            isBestSeller
-            title
-            ingress
-            starRating
-            categories
-            authors {
-              name
-            }
-            prices {
-              price
-              currency
-              discount
-            }
-            hours
-            likesInProcent
-            reviews
-            likes
-            content {
-              description
-              includes
-              programDetails {
+    fetch('https://courseprovider-silicon-win23-annaozmehak.azurewebsites.net/api/graphql?code=CVCZN64AEFAJ7yBHc-pthwn1688UT39TE83HmqIlT2RlAzFuianevA%3D%3D', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query: `
+          mutation ($input: CourseUpdateRequestInput!) {
+            updateCourse(input: $input) {
+              isBestSeller
+              imageUri
+              title
+              ingress
+              starRating
+              categories
+              authors {
+                name
+              }
+              prices {
+                price
+                currency
+                discount
+              }
+              hours
+              likesInProcent
+              reviews
+              likes
+              content {
                 description
-                title
+                includes
+                programDetails {
+                  description
+                  title
+                }
               }
             }
-          }
-        }`,
-      variables: {
-        input: updatedCourse,
-      },
-    }),
-  })
+          }`,
+        variables: {
+          input: updatedCourse,
+        },
+      }),
+    })
     .then(res => {
       if (res.ok) {
         return res.json();
@@ -198,12 +206,35 @@ useEffect(() => {
     });
   }
 
+  
+  const handleFileChange = async (event : ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+        const file = event.target.files[0];
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const res = await fetch('https://fileprovider-win23-annaozmehak.azurewebsites.net/api/Upload?code=pIfXazN1RAMcOObk2Q1q5LCrjodZjEvGPmRDlPTxVfKmAzFuN1TVXw%3D%3D&containerName=courses', { 
+            method: 'POST',
+            body: formData
+        });
+
+        if (res.status === 200) {
+            const result = await res.json();
+            setImageUri(result.filePath);
+            setError("");
+        } else {
+            setError("An error occurred while uploading the image");
+        }
+    }
+}
+
     return (
       <main>
         <div className="content"></div>
         <div className={styles.headerContent}>
             <h1>Courses</h1>
-            <CreateModel onCreate={handleCreateCourse} onUpdate={handleUpdate} update={update} />
+            <CreateModel onCreate={handleCreateCourse} onUpdate={handleUpdate} update={update} handleFile={handleFileChange} />
           </div>
           <div className={styles.courses}>
           { 
@@ -219,7 +250,7 @@ useEffect(() => {
                 update={update}
               />
 
-              <UpdateModal onUpdateCourse={handleUpdateCourse} onUpdate={handleUpdate} update={update} course={data} />
+              <UpdateModal onUpdateCourse={handleUpdateCourse} onUpdate={handleUpdate} update={update} course={data} handleFileChange={handleFileChange} />
 
               <img src={data.imageUri} alt={data.title} />
               <div className={styles.textContent}>

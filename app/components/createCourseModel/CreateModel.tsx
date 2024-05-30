@@ -8,9 +8,10 @@ interface CreateModelProps {
     onCreate: (courseData: CourseContent) => void;
     onUpdate: () => void;
     update: boolean;
+    handleFile: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function CreateModel({ onCreate, onUpdate, update } : CreateModelProps) {
+export default function CreateModel({ onCreate, onUpdate, update, handleFile } : CreateModelProps) {
     const [show, setShow] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
     const [error, setError] = useState<string>('');
@@ -41,7 +42,7 @@ export default function CreateModel({ onCreate, onUpdate, update } : CreateModel
         const programDetailTitleInput = (document.querySelector('input[name="programDetailTitle"]') as HTMLInputElement).value;
         
         const courseData: CourseContent = {
-            imageUri: '',
+            imageUri: (document.querySelector('input[name="file"]') as HTMLInputElement).value,
             imageHeaderUri: '',
             title: (document.querySelector('input[name="title"]') as HTMLInputElement).value,
             ingress: (document.querySelector('input[name="ingress"]') as HTMLInputElement).value,
@@ -89,6 +90,10 @@ export default function CreateModel({ onCreate, onUpdate, update } : CreateModel
                 <Modal.Title>Create a course</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    <form id="updateProfileImage" encType='multipart/form-data'>
+                        <label htmlFor='fileInput' className={`btn btn-circle btn-circle-sm ${styles.label}`}>Upload image</label>
+                        <input id="fileInput" type="file" name="file" accept='image/*' onChange={handleFile} />
+                    </form>
                     <form>
                         <div className={`input-group ${styles.inputGroup}`}>
                             <label htmlFor="title">Title</label>
