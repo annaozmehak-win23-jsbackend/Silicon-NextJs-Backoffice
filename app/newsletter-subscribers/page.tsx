@@ -123,7 +123,6 @@ const updateSubscriber = (email: string, updatedData: any) => {
                       onDelete={() => unSubscribeUser(data.email)}
                       onUpdate={handleUpdate}
                       update={update}
-                      
                       />
                   </td>
               </tr>

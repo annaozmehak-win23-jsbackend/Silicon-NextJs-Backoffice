@@ -47,7 +47,7 @@ export default function Courses() {
 const json = JSON.stringify({ query });
 
 const fetchCourses = () => {
-  fetch("http://localhost:7180/api/graphql", {
+  fetch("https://courseprovider-silicon-win23-annaozmehak.azurewebsites.net/api/graphql?code=CVCZN64AEFAJ7yBHc-pthwn1688UT39TE83HmqIlT2RlAzFuianevA%3D%3D", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -71,7 +71,7 @@ useEffect(() => {
       return;
     }
     
-    fetch("http://localhost:7180/api/graphql", {
+    fetch("https://courseprovider-silicon-win23-annaozmehak.azurewebsites.net/api/graphql?code=CVCZN64AEFAJ7yBHc-pthwn1688UT39TE83HmqIlT2RlAzFuianevA%3D%3D", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -105,7 +105,7 @@ useEffect(() => {
   };
 
   const handleDeleteCourse = (id: string) => {
-    fetch("http://localhost:7180/api/graphql", {
+    fetch("https://courseprovider-silicon-win23-annaozmehak.azurewebsites.net/api/graphql?code=CVCZN64AEFAJ7yBHc-pthwn1688UT39TE83HmqIlT2RlAzFuianevA%3D%3D", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -142,7 +142,7 @@ useEffect(() => {
     setCourses(prevCourses => prevCourses.map(course => course.id === updatedCourse.id ? updatedCourse : course));
 
     console.log(updatedCourse);
-  fetch('http://localhost:7180/api/graphql', {
+  fetch('https://courseprovider-silicon-win23-annaozmehak.azurewebsites.net/api/graphql?code=CVCZN64AEFAJ7yBHc-pthwn1688UT39TE83HmqIlT2RlAzFuianevA%3D%3D', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
