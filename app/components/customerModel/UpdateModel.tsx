@@ -5,13 +5,29 @@ interface UpdateModelProps {
     btnLabel?: string;
     btnIcon?: string;
     btnStyling?: string;
+    customer: {
+        firstName: string;
+        lastName: string;
+        email: string;
+        password: string;
+    }
 }
 
-export default function UpdateModel({ btnLabel, btnIcon, btnStyling } : UpdateModelProps) {
+export default function UpdateModel({ btnLabel, btnIcon, btnStyling, customer } : UpdateModelProps) {
     const [show, setShow] = useState(false);
+    const [firstName, setFirstName] = useState(customer ? customer.firstName : '');
+    const [lastName, setLastName] = useState(customer ? customer.lastName : '');
+    const [email, setEmail] = useState(customer ? customer.email : '');
+    const [password, setPassword] = useState(customer ? customer.password : '');
 
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleShow = () => {
+        setFirstName(customer.firstName);
+        setLastName(customer.lastName);
+        setEmail(customer.email);
+        setPassword(customer.password);
+        setShow(true);
+    }
     
     return (
         <div>
@@ -28,19 +44,19 @@ export default function UpdateModel({ btnLabel, btnIcon, btnStyling } : UpdateMo
                     <form>
                         <div className="input-group">
                             <label htmlFor="firstName">First name</label>
-                            <input type="text" id="firstName" placeholder="Enter first name" />
+                            <input type="text" id="firstName" placeholder="Enter first name" value={firstName} onChange={e => setFirstName(e.target.value)} />
                         </div>
                         <div className="input-group">
                             <label htmlFor="lastName">Last name</label>
-                            <input type="text" id="lastName" placeholder="Enter last name" />
+                            <input type="text" id="lastName" placeholder="Enter last name" value={lastName} onChange={e => setLastName(e.target.value)} />
                         </div>  
                         <div className="input-group">
                             <label htmlFor="email">Email</label>
-                            <input type="email" id="email" placeholder="Enter email" />
+                            <input type="email" id="email" placeholder="Enter email" value={email} onChange={e => setEmail(e.target.value)} />
                         </div>  
                         <div className="input-group">
                             <label htmlFor="password">Password</label>
-                            <input type="password" id="password" placeholder="Enter password" />
+                            <input type="password" id="password" placeholder="Enter password"  value={password} onChange={e => setPassword(e.target.value)} />
                         </div> 
                     </form>
                 </Modal.Body>

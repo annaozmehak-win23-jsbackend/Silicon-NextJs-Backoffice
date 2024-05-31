@@ -21,19 +21,19 @@ export default function UpdateModel({ onUpdateCourse, onUpdate, update, course, 
     const [isBestseller, setIsBestseller] = useState<boolean>(course.isBestSeller);
     const [isDigital, setIsDigital] = useState<boolean>(course.isDigital);
     const [categories, setCategories] = useState<string[]>(course.categories);
-    const [authors, setAuthors] = useState<string>(course.authors[0].name);
+    const [authors, setAuthors] = useState<string>(course && course.authors ? course.authors[0].name : '');    
     const [starRating, setStarRating] = useState<number>(course.starRating);
-    const [price, setPrice] = useState<number>(course.prices.price);
-    const [discountPrice, setDiscountPrice] = useState<number>(course.prices.discount);
-    const [currency, setCurrency] = useState<string>(course.prices.currency);
+    const [price, setPrice] = useState<number>(course.prices?.price);
+    const [discountPrice, setDiscountPrice] = useState<number>(course.prices?.discount);
+    const [currency, setCurrency] = useState<string>(course.prices?.currency);
     const [hours, setHours] = useState<string>(course.hours);
     const [reviews, setReviews] = useState<string>(course.reviews);
     const [likesInProcent, setLikesInProcent] = useState<string>(course.likesInProcent);
     const [likes, setLikes] = useState<string>(course.likes);
-    const [description, setDescription] = useState<string>(course.content.description);
-    const [includes, setIncludes] = useState<string[]>(course.content.includes);
-    const [programDetailTitle, setProgramDetailTitle] = useState<string>(course.content.programDetails[0].title);
-    const [programDetailDescription, setProgramDetailDescription] = useState<string>(course.content.programDetails[0].description);
+    const [description, setDescription] = useState<string>(course.content?.description);
+    const [includes, setIncludes] = useState<string[]>(course.content?.includes);
+    const [programDetailTitle, setProgramDetailTitle] = useState<string>(course.content?.programDetails[0].title);
+    const [programDetailDescription, setProgramDetailDescription] = useState<string>(course.content?.programDetails[0].description);
 
     
     const handleClose = () => setShow(false);
@@ -45,7 +45,9 @@ export default function UpdateModel({ onUpdateCourse, onUpdate, update, course, 
 
     const handleUpdate = () => {
         const authorsInput = (document.querySelector('input[name="author"]') as HTMLInputElement).value;
-        const authorsArray = authorsInput.split(',').map(author => ({ name: author.trim() }));
+        const authorsArray = authorsInput.includes(',') 
+            ? authorsInput.split(',').map(author => ({ name: author.trim() })) 
+            : [{ name: authorsInput.trim() }];
 
         const priceInput = (document.querySelector('input[name="price"]') as HTMLInputElement).value;
         const price = Number(priceInput);
@@ -193,7 +195,7 @@ export default function UpdateModel({ onUpdateCourse, onUpdate, update, course, 
                         <div className={`input-group ${styles.inputGroup}`}>
                             <label htmlFor="includes">Includes</label>
                             {
-                                includes.map((include, index) => (
+                                includes?.map((include, index) => (
                                     <input 
                                         key={index}
                                         type="text" 

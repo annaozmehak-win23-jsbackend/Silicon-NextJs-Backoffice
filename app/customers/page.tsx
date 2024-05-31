@@ -81,7 +81,7 @@ export default function Customers() {
             customerData.map((data) => (
               <tr key={data.id}>
                 <td>
-                  <UpdateModel btnIcon="fa-regular fa-pen-to-square" />
+                  <UpdateModel btnIcon="fa-regular fa-pen-to-square" customer={data} />
                 </td>
                 <td>{data.id}</td>
                 <td>{data.firstName}</td>

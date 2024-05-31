@@ -28,7 +28,9 @@ export default function CreateModel({ onCreate, onUpdate, update, handleFile } :
         const selectedCategory = categoriesSelect.value;
 
         const authorsInput = (document.querySelector('input[name="author"]') as HTMLInputElement).value;
-        const authorsArray = authorsInput.split(',').map(author => ({ name: author.trim() }));
+        const authorsArray = authorsInput.includes(',') 
+            ? authorsInput.split(',').map(author => ({ name: author.trim() })) 
+            : [{ name: authorsInput.trim() }];
 
         const priceInput = (document.querySelector('input[name="price"]') as HTMLInputElement).value;
         const discountPriceInput = (document.querySelector('input[name="discountPrice"]') as HTMLInputElement).value;
@@ -54,7 +56,7 @@ export default function CreateModel({ onCreate, onUpdate, update, handleFile } :
             prices: {
                 price: parseFloat(priceInput),
                 currency: currencyInput,
-                discount: parseFloat(discountPriceInput),
+                discount: discountPriceInput ? parseFloat(discountPriceInput) : 0,
             },
             hours: (document.querySelector('input[name="hours"]') as HTMLInputElement).value,
             reviews: (document.querySelector('input[name="reviews"]') as HTMLInputElement).value,
@@ -138,7 +140,7 @@ export default function CreateModel({ onCreate, onUpdate, update, handleFile } :
                             </div> 
                             <div className={`input-group ${styles.inputGroup}`}>
                                 <label htmlFor="discountPrice">Discount Price</label>     
-                                <input type="number" name='discountPrice' />
+                                <input type="string" name='discountPrice' />
                             </div> 
                           
                         </div>  
